@@ -48,6 +48,7 @@ public class BankAccountMain
 		ArrayList<BankAccount> accounts = new ArrayList<BankAccount>();
 		
 		//Creates new scanner object
+		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		
 		//local variables
@@ -91,7 +92,7 @@ public class BankAccountMain
 				{
 					do
 					{
-						System.out.print("Enter the initial balance: ");
+						System.out.print("Enter the initial balance: $");
 						balance = in.next();
 						in.nextLine();
 						if (!isNumeric(balance))
@@ -371,6 +372,135 @@ public class BankAccountMain
 						}
 						case "transfer":
 						{
+							boolean continueTransfer = true;
+							while (continueTransfer)
+							{
+								BankAccount currentAccount = null;
+								BankAccount withdrawAccount = null;
+								BankAccount depositAccount = null;
+								int currentAccountNum;
+								boolean continueName = true;
+								boolean continueAccNum = true;
+								while (continueName)
+								{
+									System.out.print("Enter the accounts holder's name: ");
+									String name = in.nextLine();
+									ArrayList<BankAccount> accountsList = getAccounts(accounts, name);
+									if (accountsList.size() <= 1)
+									{
+										System.out.print("Error: Holder has fewer than two accounts. ");
+										continueTransfer = false;
+										continueName = false;
+										continueAccNum = false;
+									}
+									else
+									{
+										System.out.print("\nAccounts found:");
+										for (BankAccount account : accountsList)
+										{
+											System.out.print(account.toString());
+											if (account instanceof SavingsAccount) 
+											       System.out.print("\tAccount type: Savings"); 
+									        else if (account instanceof CheckingAccount)
+									           System.out.print("\tAccount type: Checking");
+										}
+										continueName = false;
+									}
+								}
+								//runs twice: sets account being withdrawn from and account being deposited into
+								for (int i=0; i<=1; i++)
+								{
+									while(continueAccNum)
+									{
+										System.out.print("\nEnter the account number of the account to");
+										if (i==0)
+											System.out.print(" withdraw from: ");
+										else if (i==1)
+											System.out.print(" deposit into: ");
+										try
+										{
+											currentAccountNum = in.nextInt();
+											currentAccount = getAccount(accounts, currentAccountNum);	
+										}
+										catch (InputMismatchException e)
+										{
+											System.out.println("Error: input must be an integer. ");
+										}
+										catch (Exception e) 
+										{
+											System.out.println(e.getMessage());
+									    }
+										finally
+										{
+											in.nextLine();
+											if (currentAccount == null)
+											{
+												System.out.print("Account not found. \nOptions:\n Re-enter account number: Type \"number\"\n Search by name: Type \"name\"\n Exit Deposit Screen: Type \"exit\"\n");
+												String accNumResponse = in.next().toLowerCase();
+												in.nextLine();
+												
+												if (accNumResponse.equals("name"))
+												{
+													continueAccNum = false;
+												}
+												else if (accNumResponse.equals("exit"))
+												{
+													continueTransfer = false;
+													i = 3;
+													continueName = false;
+													continueAccNum = false;
+												}
+												else if (!accNumResponse.equals("number") && (!accNumResponse.equals("name")))
+													System.out.print("Invalid input. ");
+											}
+											else 
+											{
+												System.out.print("Account found. " + currentAccount.toString());
+												if (currentAccount instanceof SavingsAccount) 
+												       System.out.print("\tAccount type: Savings\n"); 
+										        else if (currentAccount instanceof CheckingAccount)
+										           System.out.print("\tAccount type: Checking\n");
+												if (i==0)
+													withdrawAccount = currentAccount;
+												else if (i==1)
+													depositAccount = currentAccount;
+												continueAccNum = false;
+											}	
+										}
+									}	
+								}
+								if (!(withdrawAccount==null) && !(depositAccount==null))
+								{
+									System.out.print("How much would you like to transfer? ");
+									try
+									{
+										//carries out transfer method for accounts
+										double amt = in.nextDouble();
+										in.nextLine();
+										withdrawAccount.transfer(depositAccount, amt);;
+										System.out.print("New balances:\n" + depositAccount.toString());
+										if (depositAccount instanceof SavingsAccount) 
+										       System.out.print("\tAccount type: Savings"); 
+								        else if (depositAccount instanceof CheckingAccount)
+								           System.out.print("\tAccount type: Checking");
+										System.out.print("\n" + withdrawAccount.toString());
+										if (withdrawAccount instanceof SavingsAccount) 
+										       System.out.print("\tAccount type: Savings"); 
+								        else if (withdrawAccount instanceof CheckingAccount)
+								           System.out.print("\tAccount type: Checking");
+										continueTransfer = false;
+									}
+									catch (InputMismatchException e)
+									{
+										System.out.println("Error: input must be a number. ");
+										in.nextLine();
+									}
+									catch (Exception e)
+									{
+										System.out.println(e.getMessage());
+									}
+								}
+							}
 							break;
 						}
 						case "number":
@@ -387,9 +517,9 @@ public class BankAccountMain
 								{
 									System.out.print(account.toString());
 									if (account instanceof SavingsAccount) 
-									       System.out.print("\tAccount type: Savings"); 
+									       System.out.print("\tAccount type: Savings\n"); 
 							        else if (account instanceof CheckingAccount)
-							           System.out.print("\tAccount type: Checking");
+							           System.out.print("\tAccount type: Checking\n");
 								}
 							}
 							break;
@@ -414,3 +544,5 @@ public class BankAccountMain
 		}
 	}
 }
+	
+
