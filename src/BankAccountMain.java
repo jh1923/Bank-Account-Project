@@ -151,7 +151,7 @@ public class BankAccountMain
 				while (continueTransaction)
 				{
 					//determines transaction type
-					System.out.print("\n=========\nWhat would you like to do? \n Options: \n Make a Deposit: Type \"deposit\"\n Make a Withdrawl: Type \"withdraw\"\n Make a Transfer: Type \"transfer\"\n Get Account Numbers: Type \"number\"\n Exit Transactions Screen: Type \"exit\"\n");
+					System.out.print("\n===========\nTransaction\n===========\n Make a Deposit: Type \"deposit\"\n Make a Withdrawl: Type \"withdraw\"\n Make a Transfer: Type \"transfer\"\n Get Account Numbers: Type \"numbers\"\n Exit Transaction Screen: Type \"exit\"\n");
 					String transactionResponse = in.next();
 					in.nextLine();
 					
@@ -159,6 +159,7 @@ public class BankAccountMain
 					{
 						case "deposit":
 						{
+							System.out.print("\n=======\nDeposit\n=======\n");
 							boolean continueDeposit = true;
 							while (continueDeposit)
 							{
@@ -169,7 +170,7 @@ public class BankAccountMain
 								
 								while(continueAccNum)
 								{
-									System.out.print("\nEnter the account number: ");
+									System.out.print("Enter the account number: ");
 									try
 									{
 										currentAccountNum = in.nextInt();
@@ -266,6 +267,7 @@ public class BankAccountMain
 						
 						case "withdraw":
 						{
+							System.out.print("\n========\nWithdraw\n========\n");
 							boolean continueWithdraw = true;
 							while (continueWithdraw)
 							{
@@ -276,7 +278,7 @@ public class BankAccountMain
 								
 								while(continueAccNum)
 								{
-									System.out.print("\nEnter the account number: ");
+									System.out.print("Enter the account number: ");
 									try
 									{
 										currentAccountNum = in.nextInt();
@@ -372,15 +374,15 @@ public class BankAccountMain
 						}
 						case "transfer":
 						{
+							System.out.print("\n========\nTransfer\n========\n");
 							boolean continueTransfer = true;
 							while (continueTransfer)
 							{
-								BankAccount currentAccount = null;
 								BankAccount withdrawAccount = null;
 								BankAccount depositAccount = null;
 								int currentAccountNum;
-								boolean continueName = true;
 								boolean continueAccNum = true;
+								boolean continueName = true;
 								while (continueName)
 								{
 									System.out.print("Enter the accounts holder's name: ");
@@ -388,7 +390,7 @@ public class BankAccountMain
 									ArrayList<BankAccount> accountsList = getAccounts(accounts, name);
 									if (accountsList.size() <= 1)
 									{
-										System.out.print("Error: Holder has fewer than two accounts. ");
+										System.out.print("Error: Holder has fewer than two accounts or does not exist. ");
 										continueTransfer = false;
 										continueName = false;
 										continueAccNum = false;
@@ -408,10 +410,10 @@ public class BankAccountMain
 									}
 								}
 								//runs twice: sets account being withdrawn from and account being deposited into
-								for (int i=0; i<=1; i++)
-								{
-									while(continueAccNum)
+								while(continueAccNum)
+									for (int i=0; i<=1; i++)
 									{
+										BankAccount currentAccount = null;
 										System.out.print("\nEnter the account number of the account to");
 										if (i==0)
 											System.out.print(" withdraw from: ");
@@ -435,31 +437,38 @@ public class BankAccountMain
 											in.nextLine();
 											if (currentAccount == null)
 											{
-												System.out.print("Account not found. \nOptions:\n Re-enter account number: Type \"number\"\n Search by name: Type \"name\"\n Exit Deposit Screen: Type \"exit\"\n");
+												System.out.print("Account not found.\n\nOptions:\n Re-enter account number: Type \"number\"\n Search by name: Type \"name\"\n Exit Transfer Screen: Type \"exit\"\n");
 												String accNumResponse = in.next().toLowerCase();
 												in.nextLine();
 												
-												if (accNumResponse.equals("name"))
+												if (accNumResponse.equals("number"))
+													i = 3;
+												else if (accNumResponse.equals("name"))
 												{
 													continueAccNum = false;
+													i = 3;
 												}
 												else if (accNumResponse.equals("exit"))
 												{
 													continueTransfer = false;
-													i = 3;
 													continueName = false;
 													continueAccNum = false;
+													i = 3;
 												}
-												else if (!accNumResponse.equals("number") && (!accNumResponse.equals("name")))
-													System.out.print("Invalid input. ");
+												else
+												{
+													System.out.print("Invalid input. Returining to Transfer Screen.\n========\nTransfer\n========\n");
+													continueAccNum = false;
+													i = 3;
+												}
 											}
 											else 
 											{
-												System.out.print("Account found. " + currentAccount.toString());
+												System.out.print("\nAccount found. " + currentAccount.toString());
 												if (currentAccount instanceof SavingsAccount) 
-												       System.out.print("\tAccount type: Savings\n"); 
+												       System.out.print("\tAccount type: Savings"); 
 										        else if (currentAccount instanceof CheckingAccount)
-										           System.out.print("\tAccount type: Checking\n");
+										           System.out.print("\tAccount type: Checking");
 												if (i==0)
 													withdrawAccount = currentAccount;
 												else if (i==1)
@@ -468,22 +477,21 @@ public class BankAccountMain
 											}	
 										}
 									}	
-								}
 								if (!(withdrawAccount==null) && !(depositAccount==null))
 								{
-									System.out.print("How much would you like to transfer? ");
+									System.out.print("\nHow much would you like to transfer? $");
 									try
 									{
 										//carries out transfer method for accounts
 										double amt = in.nextDouble();
 										in.nextLine();
 										withdrawAccount.transfer(depositAccount, amt);;
-										System.out.print("New balances:\n" + depositAccount.toString());
+										System.out.print("\nNew balances:" + depositAccount.toString());
 										if (depositAccount instanceof SavingsAccount) 
 										       System.out.print("\tAccount type: Savings"); 
 								        else if (depositAccount instanceof CheckingAccount)
 								           System.out.print("\tAccount type: Checking");
-										System.out.print("\n" + withdrawAccount.toString());
+										System.out.print(withdrawAccount.toString());
 										if (withdrawAccount instanceof SavingsAccount) 
 										       System.out.print("\tAccount type: Savings"); 
 								        else if (withdrawAccount instanceof CheckingAccount)
@@ -497,15 +505,16 @@ public class BankAccountMain
 									}
 									catch (Exception e)
 									{
-										System.out.println(e.getMessage());
+										System.out.println(e.getMessage() + "Returning to Transactions screen.\n");
+										continueTransfer = false;
 									}
 								}
 							}
 							break;
 						}
-						case "number":
+						case "numbers":
 						{
-							System.out.print("Enter the account holder's name: ");
+							System.out.print("\n=======\nNumbers\n=======\nEnter the account holder's name: ");
 							String name = in.nextLine();
 							ArrayList<BankAccount> accountsList = getAccounts(accounts, name);
 							if (accountsList.size() == 0)
@@ -517,17 +526,21 @@ public class BankAccountMain
 								{
 									System.out.print(account.toString());
 									if (account instanceof SavingsAccount) 
-									       System.out.print("\tAccount type: Savings\n"); 
+									       System.out.print("\tAccount type: Savings"); 
 							        else if (account instanceof CheckingAccount)
-							           System.out.print("\tAccount type: Checking\n");
+							           System.out.print("\tAccount type: Checking");
 								}
 							}
 							break;
 						}
-						default:
+						case "exit":
 						{
 							continueTransaction = false;
 							System.out.print("Returning to Options screen. ");
+						}
+						default:
+						{
+							System.out.print("Invalid Response. ");
 						}
 					}
 				}
@@ -539,7 +552,7 @@ public class BankAccountMain
 			}
 			else
 			{
-				System.out.print("\nInvalid response. Please enter a valid response.");
+				System.out.print("\nInvalid response. ");
 			}
 		}
 	}
