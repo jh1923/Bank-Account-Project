@@ -170,7 +170,7 @@ public class BankAccountMain
 								
 								while(continueAccNum)
 								{
-									System.out.print("Enter the account number: ");
+									System.out.print("\nEnter the account number: ");
 									try
 									{
 										currentAccountNum = in.nextInt();
@@ -189,7 +189,7 @@ public class BankAccountMain
 										in.nextLine();
 										if (currentAccount == null)
 										{
-											System.out.print("Account not found. \nOptions:\n Re-enter account number: Type \"number\"\n Search by name: Type \"name\"\n Exit Deposit Screen: Type \"exit\"\n");
+											System.out.print("Account not found. \nOptions:\n Re-enter account number: Type \"number\"\n Search numbers by name: Type \"name\"\n Exit Deposit Screen: Type \"exit\"\n");
 											String accNumResponse = in.next().toLowerCase();
 											in.nextLine();
 											if (accNumResponse.equals("name"))
@@ -199,7 +199,7 @@ public class BankAccountMain
 												ArrayList<BankAccount> accountsList = getAccounts(accounts, name);
 												if (accountsList.size() == 0)
 												{
-													System.out.print("Error: No accounts found. ");
+													System.out.print("Error: No accounts found. Returning to Transaction screen.");
 													continueAccNum = false;
 													continueDeposit = false;
 												}
@@ -241,7 +241,7 @@ public class BankAccountMain
 							        else if (currentAccount instanceof CheckingAccount)
 							           System.out.println("Checking\n");
 									//asks for amount to deposit
-									System.out.print("How much would you like to deposit? ");
+									System.out.print("How much would you like to deposit? $");
 									try
 									{
 										//carries out deposit method for account
@@ -297,7 +297,7 @@ public class BankAccountMain
 										in.nextLine();
 										if (currentAccount == null)
 										{
-											System.out.print("Account not found. \nOptions:\n Re-enter account number: Type \"number\"\n Search by name: Type \"name\"\n Exit Deposit Screen: Type \"exit\"\n");
+											System.out.print("Account not found. \nOptions:\n Re-enter account number: Type \"number\"\n Search numbers by name: Type \"name\"\n Exit Deposit Screen: Type \"exit\"\n");
 											String accNumResponse = in.next().toLowerCase();
 											in.nextLine();
 											if (accNumResponse.equals("name"))
@@ -307,7 +307,7 @@ public class BankAccountMain
 												ArrayList<BankAccount> accountsList = getAccounts(accounts, name);
 												if (accountsList.size() == 0)
 												{
-													System.out.print("Error: No accounts found. ");
+													System.out.print("Error: No accounts found. Returning to Transaction screen.");
 													continueAccNum = false;
 													continueWithdraw = false;
 												}
@@ -349,7 +349,7 @@ public class BankAccountMain
 							        else if (currentAccount instanceof CheckingAccount)
 							           System.out.println("Checking\n");
 									//asks for amount to withdraw
-									System.out.print("How much would you like to withdraw? ");
+									System.out.print("How much would you like to withdraw? $");
 									try
 									{
 										//carries out withdraw method for account
@@ -388,9 +388,9 @@ public class BankAccountMain
 									System.out.print("Enter the accounts holder's name: ");
 									String name = in.nextLine();
 									ArrayList<BankAccount> accountsList = getAccounts(accounts, name);
-									if (accountsList.size() <= 1)
+									if (accountsList.size() == 0)
 									{
-										System.out.print("Error: Holder has fewer than two accounts or does not exist. ");
+										System.out.print("Error: Holder does not exist. ");
 										continueTransfer = false;
 										continueName = false;
 										continueAccNum = false;
@@ -437,7 +437,7 @@ public class BankAccountMain
 											in.nextLine();
 											if (currentAccount == null)
 											{
-												System.out.print("Account not found.\n\nOptions:\n Re-enter account number: Type \"number\"\n Search by name: Type \"name\"\n Exit Transfer Screen: Type \"exit\"\n");
+												System.out.print("Account not found.\n\nOptions:\n Search numbers by name: Type \"name\"\n Exit Transfer Screen: Type \"exit\"\n");
 												String accNumResponse = in.next().toLowerCase();
 												in.nextLine();
 												
@@ -457,7 +457,7 @@ public class BankAccountMain
 												}
 												else
 												{
-													System.out.print("Invalid input. Returining to Transfer Screen.\n========\nTransfer\n========\n");
+													System.out.print("Invalid input. Returning to Transfer Screen.\n========\nTransfer\n========\n");
 													continueAccNum = false;
 													i = 3;
 												}
