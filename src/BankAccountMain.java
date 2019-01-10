@@ -1,12 +1,19 @@
 /**
+ * 
  * @author Julia Hu
+ * Bank Account Main Class
+ * 
  */
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 public class BankAccountMain 
 {
-	//method that checks if input is a number
+	/**
+	 * checks if input is a number
+	 * @param str String to check
+	 * @return true if str is numeric, false otherwise
+	 */
 	private static boolean isNumeric(String str)
 	{
 		try
@@ -19,18 +26,25 @@ public class BankAccountMain
 			return false;
 		}
 	}
-	
-	//returns the BankAccount with a given account number
+	/**
+	 * finds account with a given account number
+	 * @param accounts ArrayList of BankAccounts
+	 * @param num int to compare with account number of each account
+	 * @return account if account is found, null otherwise
+	 */
 	private static BankAccount getAccount(ArrayList<BankAccount> accounts, int num)
 	{
 		for (BankAccount account : accounts)
-		{
 			if (account.getAcctNum() == num)
 				return account;
-		}
 		return null;
 	}
-	//returns the BankAccount with a given account holder name
+	/**
+	 * finds list all accounts with given holder name and stores them in ArrayList accountsName
+	 * @param accounts ArrayList of BankAccounts
+	 * @param name String to compare with holder names of each account
+	 * @return accountsName
+	 */
 	private static ArrayList<BankAccount> getAccounts(ArrayList<BankAccount> accounts, String name)
 	{
 		ArrayList<BankAccount> accountsName = new ArrayList<BankAccount>();
