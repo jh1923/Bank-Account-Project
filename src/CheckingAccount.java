@@ -1,4 +1,9 @@
-
+/**
+ * 
+ * @author Julia Hu
+ * CheckingAccount Class
+ *
+ */
 public class CheckingAccount extends BankAccount
 {
 	final double OVER_DRAFT_FEE;
@@ -63,6 +68,9 @@ public class CheckingAccount extends BankAccount
 			super.transfer(other,amt);
 	}
 	
+	/**
+	 * updates at end of the month by resetting number of transactions performed to zero
+	 */
 	public void endOfMonthUpdate()
 	{
 		numTransactions = 0;
