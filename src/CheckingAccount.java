@@ -6,16 +6,21 @@
  */
 public class CheckingAccount extends BankAccount
 {
+	//fields
 	final double OVER_DRAFT_FEE;
 	final double TRANSACTION_FEE;
 	final double FREE_TRANS;
-	
-	//field
 	private int numTransactions;
 	
 	//constructors
-	
-	//initial balance determined when constructor is called
+	/**
+	 * creates CheckingAccount with a given balance
+	 * @param n name
+	 * @param b balance
+	 * @param odf overdraft fee
+	 * @param tf transfer fee
+	 * @param freeTrans number of free transactions
+	 */
 	public CheckingAccount(String n, double b, double odf, double tf, int freeTrans)
 	{
 		super(n, b);
@@ -23,13 +28,23 @@ public class CheckingAccount extends BankAccount
 		TRANSACTION_FEE = tf;
 		FREE_TRANS = freeTrans;
 	}
-	//initial balance is zero
+	/**
+	 * creates CheckingAccount with a balance of 0
+	 * @param n name
+	 * @param odf overdraft fee
+	 * @param tf transfer fee
+	 * @param freeTrans number of free transactions
+	 */
 	public CheckingAccount(String n, double odf, double tf, int freeTrans)
 	{
 		this(n, 0, odf, tf, freeTrans);
 	} 
 	
 	//methods
+	/**
+	 * deposits money into CheckingAccount
+	 * @param amt the amount of money to be deposited
+	 */
 	public void deposit(double amt)
 	{
 		if (amt<0)
@@ -43,6 +58,10 @@ public class CheckingAccount extends BankAccount
 		}
 	}
 	
+	/**
+	 * withdraws money from SavingsAccount
+	 * @param amt the amount of money to be withdrawn
+	 */
 	public void withdraw(double amt)
 	{
 		if (getBalance() <= 0)
@@ -58,6 +77,11 @@ public class CheckingAccount extends BankAccount
 		}
 	}
 	
+	/**
+	 * transfers money from one account to another
+	 * @param other BankAccount that is being deposited into
+	 * @param amt amount of money being transferred from SavingsAccount
+	 */
 	public void transfer(BankAccount other, double amt)
 	{
 		if (!(other.getName().equals(getName())))
